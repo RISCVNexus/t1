@@ -13,7 +13,7 @@ import org.chipsalliance.t1.rtl.decoder.attribute._
 object DecoderParam {
   implicit def rwP: upickle.default.ReadWriter[DecoderParam] = upickle.default.macroRW
 }
-case class DecoderParam(fpuEnable: Boolean, zvbbEnable: Boolean, allInstructions: Seq[Instruction])
+case class DecoderParam(fpuEnable: Boolean, zvbbEnable: Boolean, zvkEnable: Boolean, allInstructions: Seq[Instruction])
 
 trait T1DecodeFiled[D <: Data] extends DecodeField[T1DecodePattern, D] with FieldName
 
@@ -225,6 +225,10 @@ object Decoder {
     override def getTriState(pattern: T1DecodePattern): TriState = pattern.isZvbb.value
   }
 
+  object zvk extends BoolField {
+    override def getTriState(pattern: T1DecodePattern): TriState = pattern.isZvk.value
+  }
+
   object topUop extends T1TopUopField {
     override def genTable(pattern: T1DecodePattern): BitPat = pattern.topUop.value match {
       case _: TopT0.type => BitPat("b000")
@@ -345,6 +349,19 @@ object Decoder {
           case _: zvbbUop8.type => BitPat("b1000") // andn
           case _ => BitPat.dontCare(4)
         }
+      case zvkCase: ZvkUOPType =>
+        zvkCase match {
+          case _: zvkUop0.type => BitPat("b0000") // 
+          case _: zvkUop1.type => BitPat("b0001") // 
+          case _: zvkUop2.type => BitPat("b0010") // 
+          case _: zvkUop3.type => BitPat("b0011") // 
+          case _: zvkUop4.type => BitPat("b0100") // 
+          case _: zvkUop5.type => BitPat("b0101") // 
+          case _: zvkUop6.type => BitPat("b0110") // 
+          case _: zvkUop7.type => BitPat("b0111") // 
+          case _: zvkUop8.type => BitPat("b1000") // 
+          case _ => BitPat.dontCare(4)
+        }
       case _ => BitPat.dontCare(4)
     }
   }
@@ -420,6 +437,12 @@ object Decoder {
     if (param.zvbbEnable)
       Seq(
         zvbb,
+      )
+    else Seq()
+  } ++ {
+    if (param.zvkEnable)
+      Seq(
+        zvk,
       )
     else Seq()
   }

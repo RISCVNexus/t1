@@ -146,6 +146,32 @@ object isUnsigned0 {
       "vwsll.vv",
       "vwsll.vx",
       "vwsll.vi",
+      // rv_zvkg
+      "vghsh.vv",
+      "vgmul.vv",
+      // rv_zvkned
+      "vaesdf.vv",
+      "vaesdf.vs",
+      "vaesdm.vv",
+      "vaesdm.vs",
+      "vaesef.vv",
+      "vaesef.vs",
+      "vaesem.vv",
+      "vaesem.vs",
+      "vaesz.vs", 
+      "vaeskf1.vi",      
+      "vaeskf2.vi",
+      // rv_zvknha
+      "vsha2ms.vv",
+      "vsha2ch.vv",
+      "vsha2cl.vv",
+      // rv_zvksed
+      "vsm4k.vi",
+      "vsm4r.vv",
+      "vsm4r.vs",
+      // rv_zvksh
+      "vsm3c.vi",
+      "vsm3me.vv",
     )
     allMatched.contains(t1DecodePattern.instruction.name)
   }
